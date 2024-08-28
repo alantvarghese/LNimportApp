@@ -5,77 +5,6 @@ define([
     record,
     format,
   ) => {
-  
-    const disableRuleset=(rulesetId)=>{
-      record.submitFields({
-        type: 'customrecord_ce_changeset',
-        id: rulesetId,
-        values: {
-            'custrecord_mhi_acc_do_not_run': true
-        }
-    });
-    };
-    const updateRunLog=(runLogId,status)=>{
-      record.submitFields({
-        type: 'customrecord_mhi_ce_runlog',
-        id: runLogId,
-        values: {
-            'custrecord_mhi_runlog_processstatus': status
-        }
-    });
-    }
-    const createRunLog = (runlog) => {
-      const runLogRecord = record.create({
-        type: 'customrecord_mhi_ce_runlog',
-        isDynamic: true
-      });
-      let namePrefix = 'Created ';
-      if(!runlog.transactionRecordId || runlog.transactionRecordId==null){
-        namePrefix = 'Not Created '
-      }
-      runLogRecord.setValue({
-        fieldId: 'name',
-        value: namePrefix + runlog.name
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_runlog_changeset',
-        value: runlog.changeSet
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_ce_runlog_transmap',
-        value: runlog.transactionMap
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_ce_runlog_transactionid',
-        value: runlog.transactionRecordId
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_runlog_selectqueries',
-        value: runlog.selectQueries
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mh_ce_updatequery',
-        value: runlog.updateQuery
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_ce_nsawupdate_code',
-        value: runlog.statusOfUpdate
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_runlog_processstatus',
-        value: runlog.runlogStatus
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_runlog_stacktrace',
-        value: runlog.runlogStackTrace
-      });
-      runLogRecord.setValue({
-        fieldId: 'custrecord_mhi_acc_runlog_globalgrp',
-        value: runlog.globalGrouping
-      });
-      return runLogRecord.save();
-    };
-  
     const transformTransaction = function (transactionDetails, sourceType, destType) {
       var recordObj = record.transform({
         fromType: sourceType,
@@ -227,9 +156,6 @@ define([
     return {
         createTransaction,
         transformTransaction,
-        createRunLog,
-        updateRunLog,
-        disableRuleset
     };
   });
   
